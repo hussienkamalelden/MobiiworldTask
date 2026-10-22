@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant role-admin (&:where([data-role="admin"] *));
+@custom-variant role-user (&:where([data-role="user"] *));
 
 :root {
   color-scheme: light;
@@ -135,6 +137,10 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 ::selection {

@@ -1,9 +1,11 @@
 "use client";
 
 import { LoaderCircle } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useInfiniteProducts } from "@/hooks/use-infinite-products";
 import type { CatalogParams } from "@/lib/catalog";
+import { applyChangesToList } from "@/lib/product-changes";
+import type { ProductChanges } from "@/lib/product-changes";
 import type { ProductSummary, ProductsResponse } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "./product-grid";
@@ -13,12 +15,15 @@ const PLACEHOLDER_COUNT = 4;
 interface ProductListProps {
   initialPage: ProductsResponse<ProductSummary>;
   params: CatalogParams;
+  changes: ProductChanges;
+  total: number;
 }
 
-export function ProductList({ initialPage, params }: ProductListProps) {
-  const { products, total, hasMore, status, loadMore } = useInfiniteProducts(
-    initialPage,
-    params,
+export function ProductList({ initialPage, params, changes, total }: ProductListProps) {
+  const { products, hasMore, status, loadMore } = useInfiniteProducts(initialPage, params);
+  const visibleProducts = useMemo(
+    () => applyChangesToList(products, changes, params),
+    [products, changes, params],
   );
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +47,7 @@ export function ProductList({ initialPage, params }: ProductListProps) {
   return (
     <>
       <ProductGrid
-        products={products}
+        products={visibleProducts}
         placeholderCount={status === "loading" ? PLACEHOLDER_COUNT : 0}
       />
       <div ref={sentinelRef} aria-hidden="true" />
@@ -61,7 +66,7 @@ export function ProductList({ initialPage, params }: ProductListProps) {
             </Button>
           </div>
         )}
-        {!hasMore && products.length > 0 && (
+        {!hasMore && visibleProducts.length > 0 && (
           <p>You have seen all {total} products</p>
         )}
       </div>

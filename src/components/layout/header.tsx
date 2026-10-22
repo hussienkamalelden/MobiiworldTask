@@ -1,7 +1,8 @@
 import { Store } from "lucide-react";
 import Link from "next/link";
-import { AppearanceMenu } from "./appearance-menu";
+import { RoleSwitcher } from "@/components/roles/role-switcher";
 import { MainNav } from "./main-nav";
+import { SettingsMenu } from "./settings-menu";
 
 export function Header() {
   return (
@@ -19,7 +20,8 @@ export function Header() {
         </Link>
         <div className="flex items-center gap-1 sm:gap-2">
           <MainNav />
-          <AppearanceMenu />
+          <RoleSwitcher />
+          <SettingsMenu />
         </div>
       </div>
     </header>

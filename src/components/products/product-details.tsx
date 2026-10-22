@@ -1,5 +1,6 @@
-import { Pencil } from "lucide-react";
+import { HardDrive, Pencil } from "lucide-react";
 import Link from "next/link";
+import { RoleGate } from "@/components/roles/role-gate";
 import { BackLink } from "@/components/ui/back-link";
 import { buttonStyles } from "@/components/ui/button";
 import { formatCategory, formatPrice } from "@/lib/format";
@@ -11,15 +12,17 @@ import {
 } from "@/lib/product";
 import type { Product } from "@/types/product";
 import { AvailabilityBadge } from "./availability-badge";
+import { DeleteProductButton } from "./delete-product-button";
 import { ProductGallery } from "./product-gallery";
 import { ProductReviews } from "./product-reviews";
 import { Rating } from "./rating";
 
 interface ProductDetailsProps {
   product: Product;
+  isLocal?: boolean;
 }
 
-export function ProductDetails({ product }: ProductDetailsProps) {
+export function ProductDetails({ product, isLocal = false }: ProductDetailsProps) {
   const originalPrice = getOriginalPrice(product.price, product.discountPercentage);
   const reviewCount = product.reviews.length;
 
@@ -28,8 +31,11 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     { label: "SKU", value: product.sku },
     { label: "In stock", value: `${product.stock} units` },
     { label: "Minimum order", value: `${product.minimumOrderQuantity} units` },
-    { label: "Weight", value: String(product.weight) },
-    { label: "Dimensions", value: formatDimensions(product.dimensions) },
+    { label: "Weight", value: product.weight > 0 ? String(product.weight) : "" },
+    {
+      label: "Dimensions",
+      value: product.dimensions.width > 0 ? formatDimensions(product.dimensions) : "",
+    },
     { label: "Warranty", value: product.warrantyInformation },
     { label: "Shipping", value: product.shippingInformation },
     { label: "Return policy", value: product.returnPolicy },
@@ -37,27 +43,40 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <article>
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex min-h-9 flex-wrap items-center justify-between gap-3">
         <BackLink href="/products" label="Back to products" />
-        <Link
-          href={`/products/${product.id}/edit`}
-          className={buttonStyles({ variant: "secondary", size: "sm" })}
-        >
-          <Pencil className="h-4 w-4" />
-          Edit
-        </Link>
+        <RoleGate role="admin">
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/products/${product.id}/edit`}
+              className={buttonStyles({ variant: "secondary", size: "sm" })}
+            >
+              <Pencil className="h-4 w-4" />
+              Edit
+            </Link>
+            <DeleteProductButton product={product} />
+          </div>
+        </RoleGate>
       </div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <ProductGallery images={getProductImages(product)} title={product.title} />
 
         <div className="flex flex-col">
-          <Link
-            href={`/products?category=${encodeURIComponent(product.category)}`}
-            className="self-start rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-soft-fg transition-opacity hover:opacity-80"
-          >
-            {formatCategory(product.category)}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={`/products?category=${encodeURIComponent(product.category)}`}
+              className="rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-soft-fg transition-opacity hover:opacity-80"
+            >
+              {formatCategory(product.category)}
+            </Link>
+            {isLocal && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-warning-line bg-warning-soft px-3 py-1 text-xs font-medium text-warning-fg">
+                <HardDrive className="h-3.5 w-3.5" />
+                Saved in this browser
+              </span>
+            )}
+          </div>
 
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-fg sm:text-4xl">
             {product.title}

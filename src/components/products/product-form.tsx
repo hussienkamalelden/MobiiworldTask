@@ -17,7 +17,7 @@ import {
 } from "@/lib/product-schema";
 import type { ProductFormField, ProductFormValues } from "@/lib/product-schema";
 import { ApiError } from "@/services/api-client";
-import { createProduct, updateProduct } from "@/services/product-service";
+import { createCatalogProduct, updateCatalogProduct } from "@/services/product-mutations";
 import type { Category, Product, ProductInput } from "@/types/product";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { FormField, fieldStyles, getFieldDescriptionId } from "@/components/ui/form-field";
@@ -51,8 +51,8 @@ const FIELD_CONFIG: Record<ProductFormField, FieldConfig> = {
   thumbnail: { label: "Image URL", hint: "Link to a product image." },
 };
 
-const SIMULATED_REQUEST_NOTE =
-  "DummyJSON simulates this request, so the change is not persisted.";
+const LOCAL_SAVE_NOTE =
+  "DummyJSON does not persist writes, so the change is stored in this browser.";
 
 function getFieldId(field: ProductFormField): string {
   return `product-${field}`;
@@ -119,23 +119,17 @@ export function ProductForm({ mode, categories, product }: ProductFormProps) {
 
   const onSubmit: SubmitHandler<ProductInput> = async (data) => {
     try {
-      if (mode === "edit") {
-        await updateProduct(product.id, data);
-        showToast({
-          tone: "success",
-          title: "Product updated",
-          description: `"${data.title}" was updated. ${SIMULATED_REQUEST_NOTE}`,
-        });
-        router.push(`/products/${product.id}`);
-      } else {
-        await createProduct(data);
-        showToast({
-          tone: "success",
-          title: "Product created",
-          description: `"${data.title}" was created. ${SIMULATED_REQUEST_NOTE}`,
-        });
-        router.push("/products");
-      }
+      const saved =
+        mode === "edit"
+          ? await updateCatalogProduct(product, data)
+          : await createCatalogProduct(data);
+
+      showToast({
+        tone: "success",
+        title: mode === "edit" ? "Product updated" : "Product created",
+        description: `"${saved.title}" was saved. ${LOCAL_SAVE_NOTE}`,
+      });
+      router.push(`/products/${saved.id}`);
     } catch (error) {
       setError("root.server", {
         message:

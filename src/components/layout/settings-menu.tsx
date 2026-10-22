@@ -1,10 +1,17 @@
 "use client";
 
-import { Monitor, Moon, SlidersHorizontal, Sun } from "lucide-react";
+import { Monitor, Moon, RotateCcw, SlidersHorizontal, Sun } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useState } from "react";
 import { usePreferences } from "@/hooks/use-preferences";
+import { useProductChanges } from "@/hooks/use-product-changes";
+import { showToast } from "@/hooks/use-toasts";
 import type { FontSize, Theme } from "@/lib/preferences";
+import { countProductChanges } from "@/lib/product-changes";
+import { resetProductChanges } from "@/services/local-product-store";
+import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Popover } from "@/components/ui/popover";
 
 interface Option<T extends string> {
   value: T;
@@ -69,83 +76,81 @@ function OptionGroup<T extends string>({
   );
 }
 
-export function AppearanceMenu() {
-  const panelId = useId();
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+export function SettingsMenu() {
   const { theme, fontSize, setTheme, setFontSize } = usePreferences();
+  const changeCount = countProductChanges(useProductChanges());
+  const [isResetOpen, setIsResetOpen] = useState(false);
 
-  useEffect(() => {
-    if (!open) return;
-
-    function isOutside(target: EventTarget | null) {
-      return !(target instanceof Node && containerRef.current?.contains(target));
-    }
-
-    function handlePointerDown(event: PointerEvent) {
-      if (isOutside(event.target)) setOpen(false);
-    }
-
-    function handleFocusIn(event: FocusEvent) {
-      if (isOutside(event.target)) setOpen(false);
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-        buttonRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("focusin", handleFocusIn);
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("focusin", handleFocusIn);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
+  function handleReset() {
+    resetProductChanges();
+    setIsResetOpen(false);
+    showToast({
+      tone: "success",
+      title: "Local changes cleared",
+      description: "The catalog now shows the original data from the API.",
+    });
+  }
 
   return (
-    <div ref={containerRef} className="relative">
-      <button
-        ref={buttonRef}
-        type="button"
-        aria-label="Display settings"
-        aria-expanded={open}
-        aria-controls={open ? panelId : undefined}
-        onClick={() => setOpen((current) => !current)}
-        className="flex h-9 w-9 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg aria-expanded:bg-surface-muted aria-expanded:text-fg"
+    <>
+      <Popover
+        buttonLabel="Settings"
+        panelLabel="Settings"
+        buttonClassName="flex h-9 w-9 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg aria-expanded:bg-surface-muted aria-expanded:text-fg"
+        buttonContent={<SlidersHorizontal className="h-4 w-4" />}
       >
-        <SlidersHorizontal className="h-4 w-4" />
-      </button>
+        {(close) => (
+          <div className="space-y-4">
+            <OptionGroup
+              legend="Theme"
+              name="theme"
+              value={theme}
+              options={THEME_OPTIONS}
+              onChange={setTheme}
+            />
+            <OptionGroup
+              legend="Text size"
+              name="font-size"
+              value={fontSize}
+              options={FONT_SIZE_OPTIONS}
+              onChange={setFontSize}
+            />
+            <div className="border-t border-line pt-4">
+              <p className="text-xs font-medium tracking-wide text-fg-subtle uppercase">
+                Local changes
+              </p>
+              <p className="mt-1 text-xs text-fg-muted">
+                {changeCount === 0
+                  ? "No changes are saved in this browser."
+                  : `${changeCount} ${changeCount === 1 ? "change is" : "changes are"} saved in this browser.`}
+              </p>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={changeCount === 0}
+                onClick={() => {
+                  close();
+                  setIsResetOpen(true);
+                }}
+                className="mt-3 w-full"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset local changes
+              </Button>
+            </div>
+          </div>
+        )}
+      </Popover>
 
-      {open && (
-        <div
-          id={panelId}
-          role="group"
-          aria-label="Display settings"
-          className="animate-fade-in absolute top-full right-0 z-50 mt-2 w-64 space-y-4 rounded-2xl border border-line bg-surface p-4 shadow-xl shadow-black/5"
-        >
-          <OptionGroup
-            legend="Theme"
-            name="theme"
-            value={theme}
-            options={THEME_OPTIONS}
-            onChange={setTheme}
-          />
-          <OptionGroup
-            legend="Text size"
-            name="font-size"
-            value={fontSize}
-            options={FONT_SIZE_OPTIONS}
-            onChange={setFontSize}
-          />
-        </div>
-      )}
-    </div>
+      <ConfirmDialog
+        open={isResetOpen}
+        title="Reset local changes?"
+        description="All products you created, edited or deleted in this browser will return to the original API data."
+        confirmLabel="Reset changes"
+        pendingLabel="Resetting..."
+        onConfirm={handleReset}
+        onCancel={() => setIsResetOpen(false)}
+      />
+    </>
   );
 }

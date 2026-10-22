@@ -4,13 +4,16 @@ import { useSyncExternalStore } from "react";
 import {
   DARK_MODE_QUERY,
   DEFAULT_FONT_SIZE,
+  DEFAULT_ROLE,
   DEFAULT_THEME,
   FONT_SIZES,
   FONT_SIZE_STORAGE_KEY,
+  ROLES,
+  ROLE_STORAGE_KEY,
   THEMES,
   THEME_STORAGE_KEY,
 } from "@/lib/preferences";
-import type { FontSize, Theme } from "@/lib/preferences";
+import type { FontSize, Role, Theme } from "@/lib/preferences";
 
 const listeners = new Set<() => void>();
 
@@ -43,6 +46,10 @@ function getFontSize(): FontSize {
   return readPreference(FONT_SIZE_STORAGE_KEY, FONT_SIZES, DEFAULT_FONT_SIZE);
 }
 
+function getRole(): Role {
+  return readPreference(ROLE_STORAGE_KEY, ROLES, DEFAULT_ROLE);
+}
+
 function applyPreferences() {
   const root = document.documentElement;
   const theme = getTheme();
@@ -50,6 +57,7 @@ function applyPreferences() {
   const prefersDark = window.matchMedia(DARK_MODE_QUERY).matches;
 
   root.classList.toggle("dark", theme === "dark" || (theme === "system" && prefersDark));
+  root.dataset.role = getRole();
 
   if (fontSize === DEFAULT_FONT_SIZE) {
     delete root.dataset.fontSize;
@@ -87,13 +95,15 @@ function setFontSize(fontSize: FontSize) {
   notify();
 }
 
+export function setRole(role: Role) {
+  writePreference(ROLE_STORAGE_KEY, role);
+  notify();
+}
+
 export function usePreferences() {
   const theme = useSyncExternalStore(subscribe, getTheme, () => DEFAULT_THEME);
-  const fontSize = useSyncExternalStore(
-    subscribe,
-    getFontSize,
-    () => DEFAULT_FONT_SIZE,
-  );
+  const fontSize = useSyncExternalStore(subscribe, getFontSize, () => DEFAULT_FONT_SIZE);
+  const role = useSyncExternalStore(subscribe, getRole, () => DEFAULT_ROLE);
 
-  return { theme, fontSize, setTheme, setFontSize };
+  return { theme, fontSize, role, setTheme, setFontSize, setRole };
 }

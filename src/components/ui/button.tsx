@@ -1,6 +1,6 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "danger" | "danger-outline" | "ghost";
 type ButtonSize = "sm" | "md";
 
 const BASE_STYLES =
@@ -11,6 +11,8 @@ const VARIANT_STYLES: Record<ButtonVariant, string> = {
   secondary:
     "border border-line bg-surface text-fg hover:border-accent-line hover:bg-accent-soft hover:text-accent-soft-fg",
   danger: "bg-danger text-white hover:bg-danger-hover",
+  "danger-outline":
+    "border border-danger-line bg-surface text-danger-fg hover:bg-danger-soft",
   ghost: "text-fg-muted hover:bg-accent-soft hover:text-accent-soft-fg",
 };
 
@@ -34,7 +36,7 @@ export function buttonStyles({
 }
 
 interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
+  extends ComponentProps<"button">,
     ButtonStyleOptions {}
 
 export function Button({

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductDetails } from "@/components/products/product-details";
+import { ProductDetailsResolver } from "@/components/products/product-details-resolver";
+import { isLocalProductId, parseProductId } from "@/lib/product";
 import { getProductById, getProducts } from "@/services/product-service";
 
 type ProductPageProps = PageProps<"/products/[id]">;
@@ -17,8 +18,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const product = await getProductById(id);
+  const productId = parseProductId((await params).id);
+
+  if (productId !== null && isLocalProductId(productId)) {
+    return { title: "Product details" };
+  }
+
+  const product = productId === null ? null : await getProductById(productId);
 
   if (!product) {
     return { title: "Product not found" };
@@ -36,12 +42,21 @@ export async function generateMetadata({
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = await params;
-  const product = await getProductById(id);
+  const productId = parseProductId((await params).id);
+
+  if (productId === null) {
+    notFound();
+  }
+
+  if (isLocalProductId(productId)) {
+    return <ProductDetailsResolver productId={productId} apiProduct={null} />;
+  }
+
+  const product = await getProductById(productId);
 
   if (!product) {
     notFound();
   }
 
-  return <ProductDetails product={product} />;
+  return <ProductDetailsResolver productId={productId} apiProduct={product} />;
 }

@@ -10,6 +10,8 @@ import {
   isSortOption,
 } from "@/lib/catalog";
 import type { CatalogParams } from "@/lib/catalog";
+import { getTotalAdjustment } from "@/lib/product-changes";
+import { useProductChanges } from "@/hooks/use-product-changes";
 import type { Category, ProductSummary, ProductsResponse } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -49,6 +51,8 @@ export function ProductCatalog({
     hasConflict ? "unsupported-combination" : null,
   );
 
+  const changes = useProductChanges();
+  const total = Math.max(0, initialPage.total + getTotalAdjustment(changes, params));
   const hasFilters = params.query !== "" || params.category !== "";
   const activeCategory = categories.find((item) => item.slug === params.category);
 
@@ -84,7 +88,7 @@ export function ProductCatalog({
   }
 
   function getSummary(): string {
-    const count = `${initialPage.total} ${initialPage.total === 1 ? "product" : "products"}`;
+    const count = `${total} ${total === 1 ? "product" : "products"}`;
     if (params.query) return `${count} found for "${params.query}"`;
     if (activeCategory) return `${count} in ${activeCategory.name}`;
     return count;
@@ -143,7 +147,7 @@ export function ProductCatalog({
         aria-busy={isPending}
         className={`transition-opacity duration-200 ${isPending ? "opacity-50" : "opacity-100"}`}
       >
-        {initialPage.total === 0 ? (
+        {total === 0 ? (
           <EmptyState
             title="No products found"
             description={
@@ -164,6 +168,8 @@ export function ProductCatalog({
             key={getCatalogKey(params)}
             initialPage={initialPage}
             params={params}
+            changes={changes}
+            total={total}
           />
         )}
       </div>

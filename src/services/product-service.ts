@@ -9,6 +9,7 @@ import type {
   ProductsResponse,
   SavedProduct,
 } from "@/types/product";
+import { parseProductId } from "@/lib/product";
 import { isNotFoundError, request } from "./api-client";
 
 const SUMMARY_FIELDS: ReadonlyArray<keyof ProductSummary> = [
@@ -22,11 +23,6 @@ const SUMMARY_FIELDS: ReadonlyArray<keyof ProductSummary> = [
   "brand",
   "thumbnail",
 ];
-
-function parseProductId(id: string | number): number | null {
-  const parsed = typeof id === "number" ? id : Number(id);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
-}
 
 function getProductListPath(filter: ProductFilter | undefined): string {
   if (filter?.type === "search") return "/products/search";
