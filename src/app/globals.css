@@ -1,19 +1,184 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant role-admin (&:where([data-role="admin"] *));
+@custom-variant role-user (&:where([data-role="user"] *));
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  color-scheme: light;
+
+  --canvas: #fafaf9;
+  --surface: #ffffff;
+  --surface-muted: #f5f5f4;
+  --media: #ffffff;
+  --line: #e7e5e4;
+  --line-strong: #d6d3d1;
+
+  --fg: #1c1917;
+  --fg-muted: #57534e;
+  --fg-subtle: #78716c;
+
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-fg: #0f766e;
+  --accent-soft: #f0fdfa;
+  --accent-soft-fg: #115e59;
+  --accent-line: #99f6e4;
+  --focus: #0f766e;
+
+  --success-soft: #f0fdf4;
+  --success-fg: #15803d;
+  --warning-soft: #fffbeb;
+  --warning-fg: #92400e;
+  --warning-line: #fde68a;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-fg: #b91c1c;
+  --danger-line: #fecaca;
+
+  --role-admin-soft: #f5f3ff;
+  --role-admin-fg: #6d28d9;
+  --role-admin-line: #ddd6fe;
+  --role-user-soft: #f0f9ff;
+  --role-user-fg: #0369a1;
+  --role-user-line: #bae6fd;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --canvas: #0c0a09;
+  --surface: #1c1917;
+  --surface-muted: #292524;
+  --media: #e7e5e4;
+  --line: #292524;
+  --line-strong: #44403c;
+
+  --fg: #f5f5f4;
+  --fg-muted: #d6d3d1;
+  --fg-subtle: #a8a29e;
+
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-fg: #5eead4;
+  --accent-soft: rgb(45 212 191 / 0.12);
+  --accent-soft-fg: #99f6e4;
+  --accent-line: #115e59;
+  --focus: #5eead4;
+
+  --success-soft: rgb(74 222 128 / 0.12);
+  --success-fg: #86efac;
+  --warning-soft: rgb(251 191 36 / 0.1);
+  --warning-fg: #fcd34d;
+  --warning-line: rgb(251 191 36 / 0.25);
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: rgb(248 113 113 / 0.1);
+  --danger-fg: #fca5a5;
+  --danger-line: rgb(248 113 113 / 0.25);
+
+  --role-admin-soft: rgb(167 139 250 / 0.14);
+  --role-admin-fg: #c4b5fd;
+  --role-admin-line: rgb(167 139 250 / 0.3);
+  --role-user-soft: rgb(56 189 248 / 0.12);
+  --role-user-fg: #7dd3fc;
+  --role-user-line: rgb(56 189 248 / 0.3);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-media: var(--media);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+  --color-accent-line: var(--accent-line);
+  --color-focus: var(--focus);
+
+  --color-success-soft: var(--success-soft);
+  --color-success-fg: var(--success-fg);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-line: var(--warning-line);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-line: var(--danger-line);
+
+  --color-role-admin-soft: var(--role-admin-soft);
+  --color-role-admin-fg: var(--role-admin-fg);
+  --color-role-admin-line: var(--role-admin-line);
+  --color-role-user-soft: var(--role-user-soft);
+  --color-role-user-fg: var(--role-user-fg);
+  --color-role-user-line: var(--role-user-line);
+}
+
+@theme {
+  --animate-fade-in: fade-in 0.4s ease-out both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+html[data-font-size="sm"] {
+  font-size: 87.5%;
+}
+
+html[data-font-size="lg"] {
+  font-size: 112.5%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--canvas);
+  color: var(--fg);
   font-family: var(--font-sans), system-ui, sans-serif;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent-soft-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
