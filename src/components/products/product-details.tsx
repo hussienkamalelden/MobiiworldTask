@@ -1,5 +1,7 @@
-import { ArrowLeft } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
+import { BackLink } from "@/components/ui/back-link";
+import { buttonStyles } from "@/components/ui/button";
 import { formatCategory, formatPrice } from "@/lib/format";
 import {
   formatDimensions,
@@ -35,13 +37,16 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   return (
     <article>
-      <Link
-        href="/products"
-        className="inline-flex items-center gap-1.5 rounded-full text-sm font-medium text-fg-muted transition-colors hover:text-fg"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to products
-      </Link>
+      <div className="flex items-center justify-between gap-4">
+        <BackLink href="/products" label="Back to products" />
+        <Link
+          href={`/products/${product.id}/edit`}
+          className={buttonStyles({ variant: "secondary", size: "sm" })}
+        >
+          <Pencil className="h-4 w-4" />
+          Edit
+        </Link>
+      </div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <ProductGallery images={getProductImages(product)} title={product.title} />

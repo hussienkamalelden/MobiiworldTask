@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { NavigationProgress } from "@/components/layout/navigation-progress";
+import { Toaster } from "@/components/ui/toaster";
 import { PREFERENCES_SCRIPT } from "@/lib/preferences";
 import "./globals.css";
 
@@ -34,6 +37,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: PREFERENCES_SCRIPT }} />
       </head>
       <body className="flex min-h-full flex-col">
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <a
           href="#main-content"
           className="sr-only rounded-full bg-accent px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
@@ -49,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

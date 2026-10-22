@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
+import { ProductForm } from "@/components/products/product-form";
+import { BackLink } from "@/components/ui/back-link";
 import { PageHeader } from "@/components/ui/page-header";
+import { getCategories } from "@/services/product-service";
 
 export const metadata: Metadata = {
   title: "Add Product",
 };
 
-export default function NewProductPage() {
+export const revalidate = 86400;
+
+export default async function NewProductPage() {
+  const categories = await getCategories();
+
   return (
-    <PageHeader
-      title="Add Product"
-      description="Fill in the details below to add a new product to the catalog."
-    />
+    <div className="mx-auto max-w-3xl">
+      <BackLink href="/products" label="Back to products" />
+      <div className="mt-6">
+        <PageHeader
+          title="Add Product"
+          description="Fill in the details below to add a new product to the catalog."
+        />
+      </div>
+      <ProductForm mode="create" categories={categories} />
+    </div>
   );
 }
