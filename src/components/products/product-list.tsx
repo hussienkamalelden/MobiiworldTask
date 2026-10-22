@@ -46,16 +46,16 @@ export function ProductList({ initialPage, params }: ProductListProps) {
         placeholderCount={status === "loading" ? PLACEHOLDER_COUNT : 0}
       />
       <div ref={sentinelRef} aria-hidden="true" />
-      <div aria-live="polite" className="mt-12 flex justify-center text-sm text-stone-500">
+      <div aria-live="polite" className="mt-12 flex justify-center text-sm text-fg-subtle">
         {status === "loading" && (
           <span className="inline-flex items-center gap-2">
-            <LoaderCircle className="h-4 w-4 animate-spin text-brand-700" />
+            <LoaderCircle className="h-4 w-4 animate-spin text-accent-fg" />
             Loading more products...
           </span>
         )}
         {status === "error" && (
           <div className="flex flex-col items-center gap-3 text-center">
-            <p className="text-stone-700">We could not load more products.</p>
+            <p className="text-fg-muted">We could not load more products.</p>
             <Button variant="secondary" size="sm" onClick={() => void loadMore()}>
               Try again
             </Button>

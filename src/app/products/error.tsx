@@ -17,7 +17,7 @@ export default function ProductsError({ error, retry }: ProductsErrorProps) {
   return (
     <ErrorState
       title="Something went wrong"
-      description="We could not load the products right now. Please check your connection and try again."
+      description="We could not load this page right now. Please check your connection and try again."
       action={<Button onClick={retry}>Try again</Button>}
     />
   );

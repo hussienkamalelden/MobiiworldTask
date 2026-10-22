@@ -53,7 +53,7 @@ export function SearchField({ value, onSearch, className = "" }: SearchFieldProp
         Search products by title
       </label>
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-stone-500" />
+        <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-fg-subtle" />
         <input
           id={inputId}
           type="search"
@@ -61,7 +61,7 @@ export function SearchField({ value, onSearch, className = "" }: SearchFieldProp
           onChange={(event) => setInput(event.target.value)}
           placeholder="Search products..."
           autoComplete="off"
-          className="h-11 w-full rounded-full border border-stone-200 bg-white pr-4 pl-10 text-sm text-stone-900 transition-colors placeholder:text-stone-500 hover:border-brand-300"
+          className="h-11 w-full rounded-full border border-line bg-surface pr-4 pl-10 text-sm text-fg transition-colors placeholder:text-fg-subtle hover:border-accent-line"
         />
       </div>
     </form>

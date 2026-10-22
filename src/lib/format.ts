@@ -18,3 +18,13 @@ export function formatCategory(slug: string): string {
 export function formatRating(value: number): string {
   return value.toFixed(1);
 }
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
+  timeZone: "UTC",
+});
+
+export function formatDate(value: string): string {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : dateFormatter.format(date);
+}

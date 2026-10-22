@@ -128,8 +128,8 @@ export function ProductCatalog({
       )}
 
       <div className="mt-6 mb-6 flex min-h-9 items-center justify-between gap-3">
-        <p aria-live="polite" className="inline-flex items-center gap-2 text-sm text-stone-600">
-          {isPending && <LoaderCircle className="h-4 w-4 animate-spin text-brand-700" />}
+        <p aria-live="polite" className="inline-flex items-center gap-2 text-sm text-fg-muted">
+          {isPending && <LoaderCircle className="h-4 w-4 animate-spin text-accent-fg" />}
           {isPending ? "Updating results..." : getSummary()}
         </p>
         {hasFilters && (

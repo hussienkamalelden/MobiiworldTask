@@ -30,7 +30,7 @@ export function SelectField({
       <label
         htmlFor={selectId}
         className={
-          hideLabel ? "sr-only" : "mb-1.5 block text-sm font-medium text-stone-700"
+          hideLabel ? "sr-only" : "mb-1.5 block text-sm font-medium text-fg-muted"
         }
       >
         {label}
@@ -40,7 +40,7 @@ export function SelectField({
           id={selectId}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="h-11 w-full cursor-pointer appearance-none rounded-full border border-stone-200 bg-white pr-10 pl-4 text-sm text-stone-900 transition-colors hover:border-brand-300"
+          className="h-11 w-full cursor-pointer appearance-none rounded-full border border-line bg-surface pr-10 pl-4 text-sm text-fg transition-colors hover:border-accent-line"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -48,7 +48,7 @@ export function SelectField({
             </option>
           ))}
         </select>
-        <ChevronDown className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-stone-500" />
+        <ChevronDown className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-fg-subtle" />
       </div>
     </div>
   );

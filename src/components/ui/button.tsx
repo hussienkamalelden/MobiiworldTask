@@ -7,11 +7,11 @@ const BASE_STYLES =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
 
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
-  primary: "bg-brand-700 text-white shadow-sm hover:bg-brand-800",
+  primary: "bg-accent text-white shadow-sm hover:bg-accent-hover",
   secondary:
-    "border border-stone-200 bg-white text-stone-900 hover:border-brand-200 hover:bg-brand-50 hover:text-brand-800",
-  danger: "bg-red-600 text-white hover:bg-red-700",
-  ghost: "text-stone-600 hover:bg-brand-50 hover:text-brand-800",
+    "border border-line bg-surface text-fg hover:border-accent-line hover:bg-accent-soft hover:text-accent-soft-fg",
+  danger: "bg-danger text-white hover:bg-danger-hover",
+  ghost: "text-fg-muted hover:bg-accent-soft hover:text-accent-soft-fg",
 };
 
 const SIZE_STYLES: Record<ButtonSize, string> = {

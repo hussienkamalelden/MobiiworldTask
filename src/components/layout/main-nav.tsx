@@ -24,36 +24,31 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-interface NavListProps {
-  pathname: string | null;
-}
-
-export function NavList({ pathname }: NavListProps) {
-  return (
-    <ul className="flex items-center gap-1 sm:gap-2">
-      {NAV_ITEMS.map((item) => {
-        const active = pathname !== null && item.isActive(pathname);
-        return (
-          <li key={item.href}>
-            <Link
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              className={`inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
-                active
-                  ? "bg-brand-50 text-brand-800"
-                  : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
-              }`}
-            >
-              {item.label}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
 export function MainNav() {
   const pathname = usePathname();
-  return <NavList pathname={pathname} />;
+
+  return (
+    <nav aria-label="Main">
+      <ul className="flex items-center gap-0.5 sm:gap-1">
+        {NAV_ITEMS.map((item) => {
+          const active = item.isActive(pathname);
+          return (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`inline-flex items-center rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors sm:px-3.5 ${
+                  active
+                    ? "bg-accent-soft text-accent-soft-fg"
+                    : "text-fg-muted hover:bg-surface-muted hover:text-fg"
+                }`}
+              >
+                {item.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
 }

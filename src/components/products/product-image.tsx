@@ -18,7 +18,7 @@ export function ProductImage({
 }: ProductImageProps) {
   if (!src) {
     return (
-      <div className="flex h-full w-full items-center justify-center text-stone-300">
+      <div className="flex h-full w-full items-center justify-center text-stone-400">
         <ImageOff
           role="img"
           aria-label={`No image available for ${alt}`}

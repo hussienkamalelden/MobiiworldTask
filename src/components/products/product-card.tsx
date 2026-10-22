@@ -11,8 +11,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
   return (
-    <article className="group relative flex h-full flex-col rounded-2xl has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-brand-700 has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-background">
-      <div className="relative aspect-square overflow-hidden rounded-2xl border border-stone-200/70 bg-white transition-colors duration-300 group-hover:border-brand-200">
+    <article className="group relative flex h-full flex-col rounded-2xl has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-focus has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-canvas">
+      <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-media transition-colors duration-300 group-hover:border-accent-line">
         <ProductImage
           src={product.thumbnail}
           alt={product.title}
@@ -22,10 +22,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         />
       </div>
       <div className="mt-3 flex flex-1 flex-col px-1">
-        <p className="text-xs font-medium tracking-wide text-brand-700 uppercase">
+        <p className="text-xs font-medium tracking-wide text-accent-fg uppercase">
           {formatCategory(product.category)}
         </p>
-        <h2 className="mt-1 line-clamp-1 text-sm font-medium text-stone-900 transition-colors group-hover:text-brand-800">
+        <h2 className="mt-1 line-clamp-1 text-sm font-medium text-fg transition-colors group-hover:text-accent-fg">
           <Link
             href={`/products/${product.id}`}
             className="after:absolute after:inset-0 focus-visible:outline-none"
@@ -34,7 +34,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </Link>
         </h2>
         <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="text-base font-semibold text-stone-900">
+          <p className="text-base font-semibold text-fg">
             {formatPrice(product.price)}
           </p>
           <Rating value={product.rating} />
