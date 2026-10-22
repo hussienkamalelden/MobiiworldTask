@@ -2,7 +2,9 @@ import type {
   Category,
   DeletedProduct,
   Product,
+  ProductFilter,
   ProductInput,
+  ProductListQuery,
   ProductSummary,
   ProductsResponse,
   SavedProduct,
@@ -26,18 +28,37 @@ function parseProductId(id: string | number): number | null {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
 }
 
+function getProductListPath(filter: ProductFilter | undefined): string {
+  if (filter?.type === "search") return "/products/search";
+  if (filter?.type === "category") {
+    return `/products/category/${encodeURIComponent(filter.slug)}`;
+  }
+  return "/products";
+}
+
 export async function getProducts(
+  { filter, sortBy, order = "asc", limit, skip }: ProductListQuery,
   signal?: AbortSignal,
-): Promise<ProductSummary[]> {
+): Promise<ProductsResponse<ProductSummary>> {
   const params = new URLSearchParams({
-    limit: "0",
+    limit: String(limit),
+    skip: String(skip),
     select: SUMMARY_FIELDS.join(","),
   });
-  const data = await request<ProductsResponse<ProductSummary>>(
-    `/products?${params.toString()}`,
+
+  if (filter?.type === "search") {
+    params.set("q", filter.query);
+  }
+
+  if (sortBy) {
+    params.set("sortBy", sortBy);
+    params.set("order", order);
+  }
+
+  return request<ProductsResponse<ProductSummary>>(
+    `${getProductListPath(filter)}?${params.toString()}`,
     { signal },
   );
-  return data.products;
 }
 
 export async function getProductById(

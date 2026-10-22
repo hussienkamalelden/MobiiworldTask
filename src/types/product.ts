@@ -64,6 +64,22 @@ export interface ProductsResponse<T> {
   limit: number;
 }
 
+export type SortField = "price" | "rating";
+
+export type SortOrder = "asc" | "desc";
+
+export type ProductFilter =
+  | { type: "search"; query: string }
+  | { type: "category"; slug: string };
+
+export interface ProductListQuery {
+  filter?: ProductFilter;
+  sortBy?: SortField;
+  order?: SortOrder;
+  limit: number;
+  skip: number;
+}
+
 export interface Category {
   slug: string;
   name: string;
