@@ -1,27 +1,28 @@
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://dummyjson.com';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://dummyjson.com";
 
 export class ApiError extends Error {
   readonly status: number;
 
   constructor(message: string, status: number) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
     this.status = status;
   }
 }
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 interface RequestOptions {
   method?: HttpMethod;
   body?: unknown;
   signal?: AbortSignal;
+  revalidate?: number;
 }
 
 export async function request<T>(
   path: string,
-  { method = 'GET', body, signal }: RequestOptions = {},
+  { method = "GET", body, signal, revalidate }: RequestOptions = {},
 ): Promise<T> {
   let response: Response;
 
@@ -30,15 +31,16 @@ export async function request<T>(
       method,
       signal,
       headers:
-        body === undefined ? undefined : { 'Content-Type': 'application/json' },
+        body === undefined ? undefined : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
+      next: revalidate === undefined ? undefined : { revalidate },
     });
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
+    if (error instanceof DOMException && error.name === "AbortError") {
       throw error;
     }
     throw new ApiError(
-      'Unable to reach the server. Please check your connection and try again.',
+      "Unable to reach the server. Please check your connection and try again.",
       0,
     );
   }
@@ -56,10 +58,10 @@ async function extractErrorMessage(response: Response): Promise<string> {
   try {
     const data: unknown = await response.json();
     if (
-      typeof data === 'object' &&
+      typeof data === "object" &&
       data !== null &&
-      'message' in data &&
-      typeof data.message === 'string'
+      "message" in data &&
+      typeof data.message === "string"
     ) {
       return data.message;
     }

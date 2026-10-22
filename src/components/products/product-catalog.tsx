@@ -105,7 +105,6 @@ export function ProductCatalog({
         <div className="grid grid-cols-2 gap-3 sm:flex">
           <SelectField
             label="Category"
-            hideLabel
             value={optimisticParams.category}
             onChange={handleCategoryChange}
             className="sm:w-48"
@@ -116,7 +115,6 @@ export function ProductCatalog({
           />
           <SelectField
             label="Sort by"
-            hideLabel
             value={optimisticParams.sort}
             onChange={handleSortChange}
             className="sm:w-48"

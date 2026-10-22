@@ -6,7 +6,7 @@ import type { CatalogParams } from "@/lib/catalog";
 import { getProducts } from "@/services/product-service";
 import type { ProductSummary, ProductsResponse } from "@/types/product";
 
-export type LoadMoreStatus = "idle" | "loading" | "error";
+type LoadMoreStatus = "idle" | "loading" | "error";
 
 function appendUnique(
   current: ProductSummary[],
@@ -60,5 +60,5 @@ export function useInfiniteProducts(
     }
   }, [hasMore, params, products.length]);
 
-  return { products, total, hasMore, status, loadMore };
+  return { products, hasMore, status, loadMore };
 }

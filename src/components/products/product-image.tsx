@@ -18,7 +18,7 @@ interface ProductImageProps {
   src: string;
   alt: string;
   sizes: string;
-  priority?: boolean;
+  eager?: boolean;
   className?: string;
 }
 
@@ -26,7 +26,7 @@ export function ProductImage({
   src,
   alt,
   sizes,
-  priority = false,
+  eager = false,
   className = "",
 }: ProductImageProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
@@ -50,7 +50,8 @@ export function ProductImage({
       alt={alt}
       fill
       sizes={sizes}
-      priority={priority}
+      loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "auto"}
       unoptimized={!canOptimize(src)}
       onError={() => setFailedSrc(src)}
       className={`object-contain ${className}`}

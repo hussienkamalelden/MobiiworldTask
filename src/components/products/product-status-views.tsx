@@ -45,7 +45,7 @@ export function DeletedProductView({ productId }: DeletedProductViewProps) {
               variant="secondary"
               onClick={() => {
                 restoreDeletedProduct(productId);
-                showToast({ tone: "success", title: "Product restored" });
+                showToast({ title: "Product restored" });
               }}
             >
               <RotateCcw className="h-4 w-4" />

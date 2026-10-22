@@ -85,7 +85,6 @@ export function SettingsMenu() {
     resetProductChanges();
     setIsResetOpen(false);
     showToast({
-      tone: "success",
       title: "Local changes cleared",
       description: "The catalog now shows the original data from the API.",
     });

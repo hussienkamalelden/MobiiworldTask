@@ -11,7 +11,6 @@ interface SelectFieldProps {
   value: string;
   options: ReadonlyArray<SelectOption>;
   onChange: (value: string) => void;
-  hideLabel?: boolean;
   className?: string;
 }
 
@@ -20,19 +19,13 @@ export function SelectField({
   value,
   options,
   onChange,
-  hideLabel = false,
   className = "",
 }: SelectFieldProps) {
   const selectId = useId();
 
   return (
     <div className={className}>
-      <label
-        htmlFor={selectId}
-        className={
-          hideLabel ? "sr-only" : "mb-1.5 block text-sm font-medium text-fg-muted"
-        }
-      >
+      <label htmlFor={selectId} className="sr-only">
         {label}
       </label>
       <div className="relative">

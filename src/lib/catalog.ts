@@ -6,7 +6,7 @@ import type {
 
 export const PAGE_SIZE = 12;
 
-export const PRODUCTS_PATH = "/products";
+const PRODUCTS_PATH = "/products";
 
 export type SortOption =
   | "featured"
@@ -30,7 +30,7 @@ export const SORT_OPTIONS: ReadonlyArray<SortDefinition> = [
   { value: "rating-asc", label: "Lowest Rated", sortBy: "rating", order: "asc" },
 ];
 
-export const DEFAULT_SORT: SortOption = "featured";
+const DEFAULT_SORT: SortOption = "featured";
 
 export interface CatalogParams {
   query: string;

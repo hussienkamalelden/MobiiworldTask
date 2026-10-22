@@ -12,15 +12,15 @@ import type {
 import { parseProductId } from "@/lib/product";
 import { isNotFoundError, request } from "./api-client";
 
+const LIST_REVALIDATE_SECONDS = 300;
+const CATEGORIES_REVALIDATE_SECONDS = 86400;
+
 const SUMMARY_FIELDS: ReadonlyArray<keyof ProductSummary> = [
   "id",
   "title",
   "category",
   "price",
-  "discountPercentage",
   "rating",
-  "stock",
-  "brand",
   "thumbnail",
 ];
 
@@ -53,7 +53,7 @@ export async function getProducts(
 
   return request<ProductsResponse<ProductSummary>>(
     `${getProductListPath(filter)}?${params.toString()}`,
-    { signal },
+    { signal, revalidate: LIST_REVALIDATE_SECONDS },
   );
 }
 
@@ -75,8 +75,10 @@ export async function getProductById(
   }
 }
 
-export async function getCategories(signal?: AbortSignal): Promise<Category[]> {
-  return request<Category[]>("/products/categories", { signal });
+export async function getCategories(): Promise<Category[]> {
+  return request<Category[]>("/products/categories", {
+    revalidate: CATEGORIES_REVALIDATE_SECONDS,
+  });
 }
 
 export async function createProduct(

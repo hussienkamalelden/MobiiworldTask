@@ -3,6 +3,7 @@
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { useInfiniteProducts } from "@/hooks/use-infinite-products";
+import { PAGE_SIZE } from "@/lib/catalog";
 import type { CatalogParams } from "@/lib/catalog";
 import { applyChangesToList } from "@/lib/product-changes";
 import type { ProductChanges } from "@/lib/product-changes";
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { ProductGrid } from "./product-grid";
 
 const PLACEHOLDER_COUNT = 4;
+const AUTO_LOAD_PAGES = 4;
 
 interface ProductListProps {
   initialPage: ProductsResponse<ProductSummary>;
@@ -25,11 +27,17 @@ export function ProductList({ initialPage, params, changes, total }: ProductList
     () => applyChangesToList(products, changes, params),
     [products, changes, params],
   );
+  const initialIds = useMemo(
+    () => new Set(initialPage.products.map((product) => product.id)),
+    [initialPage],
+  );
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const loadedPages = Math.ceil((products.length - initialPage.products.length) / PAGE_SIZE);
+  const canAutoLoad = loadedPages < AUTO_LOAD_PAGES;
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
-    if (!sentinel || !hasMore || status !== "idle") return;
+    if (!sentinel || !hasMore || status !== "idle" || !canAutoLoad) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -42,12 +50,13 @@ export function ProductList({ initialPage, params, changes, total }: ProductList
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, status, loadMore]);
+  }, [hasMore, status, canAutoLoad, loadMore]);
 
   return (
     <>
       <ProductGrid
         products={visibleProducts}
+        initialIds={initialIds}
         placeholderCount={status === "loading" ? PLACEHOLDER_COUNT : 0}
       />
       <div ref={sentinelRef} aria-hidden="true" />
@@ -65,6 +74,11 @@ export function ProductList({ initialPage, params, changes, total }: ProductList
               Try again
             </Button>
           </div>
+        )}
+        {status === "idle" && hasMore && !canAutoLoad && (
+          <Button variant="secondary" onClick={() => void loadMore()}>
+            Load more products
+          </Button>
         )}
         {!hasMore && visibleProducts.length > 0 && (
           <p>You have seen all {total} products</p>

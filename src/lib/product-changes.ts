@@ -39,7 +39,7 @@ export function resolveProduct(
   return { status: "missing" };
 }
 
-export function matchesCatalog(
+function matchesCatalog(
   product: Pick<Product, "title" | "category" | "description">,
   { query, category }: Pick<CatalogParams, "query" | "category">,
 ): boolean {

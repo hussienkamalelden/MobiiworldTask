@@ -7,7 +7,7 @@ import type {
 
 export type AvailabilityTone = "success" | "warning" | "danger";
 
-export const LOCAL_PRODUCT_ID_MIN = 1_000_000_000_000;
+const LOCAL_PRODUCT_ID_MIN = 1_000_000_000_000;
 
 const LOW_STOCK_THRESHOLD = 10;
 
@@ -28,7 +28,7 @@ export function getOriginalPrice(
   return price / (1 - discountPercentage / 100);
 }
 
-export function getAvailabilityStatus(stock: number): string {
+function getAvailabilityStatus(stock: number): string {
   if (stock <= 0) return "Out of Stock";
   if (stock < LOW_STOCK_THRESHOLD) return "Low Stock";
   return "In Stock";
@@ -59,10 +59,7 @@ export function toProductSummary(product: Product): ProductSummary {
     title: product.title,
     category: product.category,
     price: product.price,
-    discountPercentage: product.discountPercentage,
     rating: product.rating,
-    stock: product.stock,
-    brand: product.brand,
     thumbnail: product.thumbnail,
   };
 }

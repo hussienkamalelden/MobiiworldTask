@@ -12,7 +12,7 @@ export interface ProductReview {
   reviewerEmail: string;
 }
 
-export interface ProductMeta {
+interface ProductMeta {
   createdAt: string;
   updatedAt: string;
   barcode: string;
@@ -46,15 +46,7 @@ export interface Product {
 
 export type ProductSummary = Pick<
   Product,
-  | "id"
-  | "title"
-  | "category"
-  | "price"
-  | "discountPercentage"
-  | "rating"
-  | "stock"
-  | "brand"
-  | "thumbnail"
+  "id" | "title" | "category" | "price" | "rating" | "thumbnail"
 >;
 
 export interface ProductsResponse<T> {

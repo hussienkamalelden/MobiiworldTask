@@ -33,7 +33,6 @@ export function DeleteProductButton({ product }: DeleteProductButtonProps) {
     try {
       await deleteCatalogProduct(product);
       showToast({
-        tone: "success",
         title: "Product deleted",
         description: `"${product.title}" was removed from the catalog.`,
       });

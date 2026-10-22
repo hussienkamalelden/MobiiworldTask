@@ -10,6 +10,7 @@ interface ProductGalleryProps {
 
 export function ProductGallery({ images, title }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [hasSwitched, setHasSwitched] = useState(false);
   const activeImage = images[activeIndex] ?? "";
 
   return (
@@ -19,9 +20,9 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
           key={activeImage}
           src={activeImage}
           alt={title}
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          priority
-          className="animate-fade-in p-8 sm:p-12"
+          sizes="(min-width: 1280px) 560px, (min-width: 1024px) 45vw, 80vw"
+          eager
+          className={`p-8 sm:p-12 ${hasSwitched ? "animate-fade-in" : ""}`}
         />
       </div>
 
@@ -33,7 +34,10 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
               <li key={image}>
                 <button
                   type="button"
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setHasSwitched(true);
+                  }}
                   aria-label={`Show image ${index + 1} of ${images.length}`}
                   aria-pressed={isActive}
                   className={`relative block aspect-square w-full overflow-hidden rounded-xl border-2 bg-media transition-colors ${

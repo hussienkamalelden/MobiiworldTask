@@ -6,10 +6,10 @@ import { Rating } from "./rating";
 
 interface ProductCardProps {
   product: ProductSummary;
-  priority?: boolean;
+  eager?: boolean;
 }
 
-export function ProductCard({ product, priority = false }: ProductCardProps) {
+export function ProductCard({ product, eager = false }: ProductCardProps) {
   return (
     <article className="group relative flex h-full flex-col rounded-2xl has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-focus has-[a:focus-visible]:ring-offset-4 has-[a:focus-visible]:ring-offset-canvas">
       <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-media transition-colors duration-300 group-hover:border-accent-line">
@@ -17,7 +17,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           src={product.thumbnail}
           alt={product.title}
           sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          priority={priority}
+          eager={eager}
           className="p-6 transition-transform duration-500 ease-out group-hover:scale-105"
         />
       </div>

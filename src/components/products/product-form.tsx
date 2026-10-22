@@ -125,7 +125,6 @@ export function ProductForm({ mode, categories, product }: ProductFormProps) {
           : await createCatalogProduct(data);
 
       showToast({
-        tone: "success",
         title: mode === "edit" ? "Product updated" : "Product created",
         description: `"${saved.title}" was saved. ${LOCAL_SAVE_NOTE}`,
       });

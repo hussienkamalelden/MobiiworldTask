@@ -36,6 +36,13 @@
   --danger-soft: #fef2f2;
   --danger-fg: #b91c1c;
   --danger-line: #fecaca;
+
+  --role-admin-soft: #f5f3ff;
+  --role-admin-fg: #6d28d9;
+  --role-admin-line: #ddd6fe;
+  --role-user-soft: #f0f9ff;
+  --role-user-fg: #0369a1;
+  --role-user-line: #bae6fd;
 }
 
 .dark {
@@ -70,11 +77,17 @@
   --danger-soft: rgb(248 113 113 / 0.1);
   --danger-fg: #fca5a5;
   --danger-line: rgb(248 113 113 / 0.25);
+
+  --role-admin-soft: rgb(167 139 250 / 0.14);
+  --role-admin-fg: #c4b5fd;
+  --role-admin-line: rgb(167 139 250 / 0.3);
+  --role-user-soft: rgb(56 189 248 / 0.12);
+  --role-user-fg: #7dd3fc;
+  --role-user-line: rgb(56 189 248 / 0.3);
 }
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
@@ -105,6 +118,13 @@
   --color-danger-soft: var(--danger-soft);
   --color-danger-fg: var(--danger-fg);
   --color-danger-line: var(--danger-line);
+
+  --color-role-admin-soft: var(--role-admin-soft);
+  --color-role-admin-fg: var(--role-admin-fg);
+  --color-role-admin-line: var(--role-admin-line);
+  --color-role-user-soft: var(--role-user-soft);
+  --color-role-user-fg: var(--role-user-fg);
+  --color-role-user-line: var(--role-user-line);
 }
 
 @theme {

@@ -37,7 +37,7 @@ export function MainNav() {
 
   return (
     <nav aria-label="Main">
-      <ul className="flex items-center gap-0.5 sm:gap-1">
+      <ul className="flex items-center gap-0.5 rounded-full bg-surface-muted p-1">
         {NAV_ITEMS.map(({ href, label, icon: Icon, adminOnly, isActive }) => {
           const active = isActive(pathname);
           return (
@@ -46,10 +46,10 @@ export function MainNav() {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 title={label}
-                className={`inline-flex h-9 items-center gap-1.5 rounded-full px-2.5 text-sm font-medium whitespace-nowrap transition-colors sm:px-3.5 ${
+                className={`inline-flex h-8 items-center gap-1.5 rounded-full px-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 sm:px-3.5 ${
                   active
-                    ? "bg-accent-soft text-accent-soft-fg"
-                    : "text-fg-muted hover:bg-surface-muted hover:text-fg"
+                    ? "bg-surface text-fg shadow-sm ring-1 ring-line"
+                    : "text-fg-muted hover:text-fg"
                 }`}
               >
                 <Icon className="h-4 w-4 sm:hidden" />
